@@ -1,5 +1,5 @@
 WITH raw_links AS(
-    SELECT * FROM {{sources('netflix', 'r_links')}}
+    SELECT * FROM {{source('netflix', 'r_links')}}
     )
 
 SELECT 

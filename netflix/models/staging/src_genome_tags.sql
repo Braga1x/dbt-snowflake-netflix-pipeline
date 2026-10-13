@@ -1,5 +1,5 @@
 WITH raw_genome_tags AS(
-    SELECT * FROM {{sources('netflix', 'r_genome_tags')}}
+    SELECT * FROM {{source('netflix', 'r_genome_tags')}}
     )
 
 SELECT 

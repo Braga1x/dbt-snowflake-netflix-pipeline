@@ -1,5 +1,5 @@
 WITH raw_genome_scores AS (
-    SELECT * FROM {{sources('netflix', 'r_genome_scores')}}
+    SELECT * FROM {{source('netflix', 'r_genome_scores')}}
     )
 
 SELECT

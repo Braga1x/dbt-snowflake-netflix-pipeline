@@ -3,7 +3,7 @@
 )}}
 
 WITH raw_ratings AS (
-    SELECT * FROM {{sources('netflix', 'r_ratings')}}
+    SELECT * FROM {{source('netflix', 'r_ratings')}}
 )
 
 SELECT 
