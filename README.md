@@ -111,11 +111,40 @@ netflix/
 
 ## 📚 Aprendizados
 
-- Diferença entre CTE, view, table, incremental e ephemeral
-- `source()` e `ref()` para o dbt montar a ordem de execução
-- Macros e testes reaproveitando lógica de qualidade de dados
-- Depuração de erros lendo o SQL compilado em `target/compiled`
+### Fundamentos do dbt
+- **Estrutura de um projeto dbt:** `dbt_project.yml`, `models/`, `seeds/`, `snapshots/`, `macros/`, `tests/` e `packages.yml`, e o papel de cada um.
+- **`profiles.yml` fora do repositório:** a conexão com o Snowflake fica em `~/.dbt/`, longe do código, para que credenciais nunca vão para o Git.
+- **Ciclo de comandos:** `dbt deps`, `seed`, `run`, `snapshot`, `test` e `docs`, sempre rodados da pasta que contém o `dbt_project.yml`.
+
+### Modelagem e materializações
+- **Camadas:** staging → dim/fct → mart, cada uma com uma responsabilidade clara.
+- **Materializações:** `view`, `table`, `incremental` e `ephemeral`, e quando cada uma faz sentido. Configurei por pasta no `dbt_project.yml`, e a configuração mais específica sobrescreve a geral.
+- **CTEs:** padrão *importar → transformar*, e a diferença entre o nome da CTE (apelido local) e o nome do modelo.
+- **Modelos incrementais:** processar só dados novos com `is_incremental()` e `{{ this }}`, e por que um erro dentro desse bloco só aparece a partir da segunda execução.
+
+### Dependências e linhagem
+- **`source()` e `ref()`:** o dbt usa essas funções para montar o DAG e decidir a ordem de execução, em vez de eu escrever nomes de tabela fixos.
+- **Sources com `identifier`:** dar um nome próprio no dbt a tabelas cruas do `RAW`, sem depender do nome físico.
+- **Documentação e linhagem:** `dbt docs generate` e `dbt docs serve` mostram o grafo entre sources, staging, dimensões e fatos.
+
+### Qualidade de dados
+- **Testes genéricos** no `schema.yml` e **testes singulares** na pasta `tests/`: o teste passa quando a consulta retorna zero linhas.
+- **Macros em Jinja:** criei `no_nulls_in_columns` para reaproveitar a mesma verificação em qualquer modelo.
+- **Pacotes:** instalei `dbt_utils` via `packages.yml` e usei `get_filtered_columns_in_relation` e `generate_surrogate_key`. Aprendi a diferença entre função de pacote e função do `adapter`.
+
+### Histórico e dados de referência
+- **Snapshots:** guardar o histórico de mudanças com a estratégia `timestamp`, usando chave substituta e `invalidate_hard_deletes`.
+- **Seeds:** carregar um CSV pequeno (datas de lançamento) direto pelo dbt.
+
+### Integração com a nuvem
+- **Amazon S3 → Snowflake:** os dados brutos saem do S3 e entram no schema `RAW`, e o dbt cuida só da etapa de transformação (ELT).
+- **Roles e permissões no Snowflake:** entendi erros de acesso a schemas e a diferença entre o role do dbt (`TRANSFORM`) e o administrador.
+
+### Depuração
+- **Ler o SQL compilado** em `target/compiled` para achar o que o Snowflake realmente recebeu.
+- **Erros comuns que resolvi:** chaves Jinja a mais, singular vs plural (`source`/`sources`, `package`/`packages`), parênteses em subqueries, tags sem fechamento (`endsnapshot`), nome de tabela com letra sobrando e senha errada no `profiles.yml`.
+- **Git e `.gitignore`:** o que ignorar em um projeto dbt (`target/`, `dbt_packages/`, `logs/`, `venv/`) e por que o `.gitignore` não afeta arquivos que já estavam rastreados.
 
 ## 👤 Autor
 
-**Gustavo Braga** · [GitHub](https://github.com/Braga1x) · [LinkedIn]
+**Gustavo Braga** · [GitHub](https://github.com/Braga1x) · https://www.linkedin.com/in/gustavo-braga-454871409/
