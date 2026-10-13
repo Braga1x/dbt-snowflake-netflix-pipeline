@@ -1,2 +1,19 @@
 venv/
 venv
+# Arquivos gerados pelo dbt (não devem ir pro Git)
+target/
+dbt_packages/
+logs/
+
+# Arquivos do sistema e ambiente virtual Python (se tiver)
+.env
+venv/
+.venv/
+.DS_Store
+
+target/
+dbt_packages/
+logs/
+venv/
+.env
+.DS_Store
