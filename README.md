@@ -107,7 +107,8 @@ netflix/
 
 ## 📸 Linhagem
 
-[Print do grafo do `dbt docs serve`]
+<img width="913" height="461" alt="image" src="https://github.com/user-attachments/assets/6d8975c4-b8b2-4bfd-a769-4da7166fc5ae" />
+
 
 ## 📚 Aprendizados
 
